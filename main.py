@@ -65,11 +65,11 @@ def callback(l, menu):
             if cmd[0] == "menu":
                 rest = menu.hae_menu_json()["restaurants"]
                 if len(cmd) == 1:
-                    sendmsg("Select a restaurant from the list: " + ", ".join(unicode(i["name"]) for i in rest) , user)
+                    sendmsg(unicode("Select a restaurant from the list: " + ", ".join(i["name"] for i in rest)) , user)
                 elif len(cmd) >= 2:
                     if cmd[1] == "*":
                         for i in rest:
-                            sendmsg(i["name"], user)
+                            sendmsg(unicode(i["name"]), user)
                             options = {}
                             for j in i["menus"][0]["meals"]:
                                 name = j["name"]
@@ -83,7 +83,7 @@ def callback(l, menu):
                         for i in rest:
                             if " ".join(cmd[1:]).lower() in i["name"].lower():
                                 found = True
-                                options = {}
+                                options = {};
                                 for j in i["menus"][0]["meals"]:
                                     name = j["name"]
                                     options[name] = []
