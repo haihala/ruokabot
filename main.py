@@ -65,7 +65,7 @@ def callback(l, menu):
             if cmd[0] == "menu":
                 rest = menu.hae_menu_json()["restaurants"]
                 if len(cmd) == 1:
-                    sendmsg("Select a restaurant from the list: " + ", ".join(i["name"] for i in rest) , user)
+                    sendmsg("Select a restaurant from the list: " + ", ".join(unicode(i["name"]) for i in rest) , user)
                 elif len(cmd) >= 2:
                     if cmd[1] == "*":
                         for i in rest:
@@ -77,7 +77,7 @@ def callback(l, menu):
                                 for x in j["contents"]:
                                     options[name].append(x["name"])
                             for o in options:
-                                sendmsg(o + ": " + ", ".join(options[o]), user)
+                                sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
                     else:
                         found = False
                         for i in rest:
@@ -90,7 +90,7 @@ def callback(l, menu):
                                     for x in j["contents"]:
                                         options[name].append(x["name"])
                                 for o in options:
-                                    sendmsg(o + ": " + ", ".join(options[o]), user)
+                                    sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
                                 break
                         if not found:
                             sendmsg("Restaurant could not be found", user)
