@@ -127,7 +127,7 @@ menu = Menu()
 
 sock.connect(("irc.cc.tut.fi", 6667))
 sendRaw("NICK %s" % NICK)
-sendRaw("USER %s 0 * : %s" % (NICK, REALNAME))
+sendRaw("USER %s B * : %s" % (NICK, REALNAME))
 for i in CHANS:
     sendRaw("JOIN %s" % i)
 
