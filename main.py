@@ -7,13 +7,14 @@ import time
 import sys
 import math
 import json
+from menufile import *
 
 def xstr(s):
     if s is None:
         return ''
     return str(s)
 
-def listenToServer():
+def listenToServer(menu):
     data = []
     while True:
         chunk = sock.recv(1024)
@@ -33,17 +34,58 @@ def listenToServer():
                 if l.split()[1] == "001":
                     sendRaw("MODE %s :+B" % NICK)
                 else:
-                    components = l.split()
-                    sender = components[0][1:].split("!")[0]
-                    msg = " ".join(components[3:])
-                    msg = msg[1:]
-                    callback(sender, msg)
+                    callback(l, menu)
 
-def callback(sender, msg):
-    msg = str(msg)
+def callback(l, menu):
+    components = l.split()
+    print (components)
+    user = components[0][1:].split("!")[0]
+    src = components[2]
+    msg = " ".join(components[3:])
+    msg = msg[1:]
     print (msg)
 
-    sendmsg("aoeu", sender)
+    # From here on is the custom part
+    if len(msg) < 2:
+        return
+    if msg[0] == "!":
+        cmd = msg[1:].split()
+        # always
+        if cmd[0] == "help":
+            if src == NICK:
+                src = user
+            sendmsg("Commands (q=query only):", src)
+            sendmsg("q" + " "*2 + "!menu", src)
+            sendmsg(" "*5 + "Responds with a list of restaurants used to fetch menus", src)
+            sendmsg("q" + " "*2 + "!menu <restaurant>", src)
+            sendmsg(" "*5 + "Responds with todays menu of restaurant. Restaurant name is a caps insensitive substring of actual name", src)
+
+        # only in private querys
+        if src == NICK:
+            if cmd[0] == "menu":
+                rest = menu.hae_menu_json()["restaurants"]
+                if len(cmd) == 1:
+                    sendmsg("Select a restaurant from the list: " + ", ".join(i["name"] for i in rest) , user)
+                elif len(cmd) >= 2:
+                    found = False
+                    for i in rest:
+                        if " ".join(cmd[1:]).lower() in i["name"].lower():
+                            found = True
+                            # sendmsg(, user)
+                            options = {}
+                            for j in i["menus"][0]["meals"]:
+                                name = j["name"]
+                                options[name] = []
+                                for x in j["contents"]:
+                                    options[name].append(x["name"])
+                            for o in options:
+                                sendmsg(o + ": " + ", ".join(options[o]), user)
+                            break
+                    if not found:
+                        sendmsg("Restaurant could not be found", user)
+        # only in channels
+        else:
+            pass
 
 def sendmsg(msg, to):
     msgl = xstr(msg).split("\n")
@@ -62,13 +104,15 @@ def sendRaw(msg):
 
 receiver = ""
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-NICK = "Ruokabot"
-CHAN = "#ro-bot"
-REALNAME = "Revolin ruokabot"
+NICK = "X6-88"
+CHANS = ["#ro-bot", "#tut-ruoka"]
+REALNAME = "X6-88 Revol-Bot"
+menu = Menu()
 
-sock.connect(("irc.inet.fi", 6667))
+sock.connect(("irc.cc.tut.fi", 6667))
 sendRaw("NICK %s" % NICK)
-sendRaw("USER %s 8 * : %s" % (NICK, REALNAME))
-time.sleep(1)
+sendRaw("USER %s 0 * : %s" % (NICK, REALNAME))
+for i in CHANS:
+    sendRaw("JOIN %s" % i)
 
-listenToServer()
+listenToServer(menu)
