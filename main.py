@@ -117,7 +117,7 @@ receiver = ""
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 NICK = "Murkinapurkki"
 CHANS = ["#ro-bot", "#tut-ruoka"]
-REALNAME = "X6-88 Revol-Bot"
+REALNAME = "Revol-Bot"
 menu = Menu()
 
 sock.connect(("irc.cc.tut.fi", 6667))
