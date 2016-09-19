@@ -49,6 +49,7 @@ def callback(l, menu):
     if len(msg) < 2:
         return
     if msg[0] == "!":
+        delay = 1.2  # seconds between messages
         cmd = msg[1:].split()
         # always
         if cmd[0] == "help":
@@ -70,6 +71,8 @@ def callback(l, menu):
                     if cmd[1] == "*":
                         for i in rest:
                             sendmsg(unicode(i["name"]), user)
+                            time.sleep(delay)
+
                             options = {}
                             for j in i["menus"][0]["meals"]:
                                 name = j["name"]
@@ -78,7 +81,7 @@ def callback(l, menu):
                                     options[name].append(x["name"])
                             for o in options:
                                 sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
-                                time.sleep(1)
+                                time.sleep(delay)
                     else:
                         found = False
                         for i in rest:
@@ -92,7 +95,7 @@ def callback(l, menu):
                                         options[name].append(x["name"])
                                 for o in options:
                                     sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
-                                    time.sleep(1)
+                                    time.sleep(delay)
                                 break
                         if not found:
                             sendmsg("Restaurant could not be found", user)
