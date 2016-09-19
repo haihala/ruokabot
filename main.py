@@ -115,7 +115,7 @@ def sendRaw(msg):
 
 receiver = ""
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-NICK = "X6-88"
+NICK = "Murkinapurkki"
 CHANS = ["#ro-bot", "#tut-ruoka"]
 REALNAME = "X6-88 Revol-Bot"
 menu = Menu()
