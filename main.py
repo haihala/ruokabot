@@ -12,7 +12,7 @@ from menufile import *
 def xstr(s):
     if s is None:
         return ''
-    return str(s)
+    return unicode(s)
 
 def listenToServer(menu):
     data = []
