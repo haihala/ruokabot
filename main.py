@@ -78,7 +78,7 @@ def callback(l, menu):
                                     options[name].append(x["name"])
                             for o in options:
                                 sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
-                                time.sleep(0.5)
+                                time.sleep(2)
                     else:
                         found = False
                         for i in rest:
@@ -92,7 +92,7 @@ def callback(l, menu):
                                         options[name].append(x["name"])
                                 for o in options:
                                     sendmsg(unicode(o + ": " + ", ".join(options[o])), user)
-                                    time.sleep(0.5)
+                                    time.sleep(2)
                                 break
                         if not found:
                             sendmsg("Restaurant could not be found", user)
