@@ -58,7 +58,7 @@ def callback(l, menu):
             sendmsg("q" + " "*2 + "!menu", src)
             sendmsg(" "*5 + "Responds with a list of restaurants used to fetch menus", src)
             sendmsg("q" + " "*2 + "!menu <restaurant>", src)
-            sendmsg(" "*5 + "Responds with todays menu of restaurant. Restaurant name is a caps insensitive substring of actual name", src)
+            sendmsg(" "*5 + "Responds with todays menu of restaurant. Restaurant name is a caps insensitive substring of actual name (!menu * = all menus)", src)
 
         # only in private querys
         if src == NICK:
@@ -67,11 +67,9 @@ def callback(l, menu):
                 if len(cmd) == 1:
                     sendmsg("Select a restaurant from the list: " + ", ".join(i["name"] for i in rest) , user)
                 elif len(cmd) >= 2:
-                    found = False
-                    for i in rest:
-                        if " ".join(cmd[1:]).lower() in i["name"].lower():
-                            found = True
-                            # sendmsg(, user)
+                    if cmd[1] == "*":
+                        for i in rest:
+                            sendmsg(i["name"], user)
                             options = {}
                             for j in i["menus"][0]["meals"]:
                                 name = j["name"]
@@ -80,9 +78,22 @@ def callback(l, menu):
                                     options[name].append(x["name"])
                             for o in options:
                                 sendmsg(o + ": " + ", ".join(options[o]), user)
-                            break
-                    if not found:
-                        sendmsg("Restaurant could not be found", user)
+                    else:
+                        found = False
+                        for i in rest:
+                            if " ".join(cmd[1:]).lower() in i["name"].lower():
+                                found = True
+                                options = {}
+                                for j in i["menus"][0]["meals"]:
+                                    name = j["name"]
+                                    options[name] = []
+                                    for x in j["contents"]:
+                                        options[name].append(x["name"])
+                                for o in options:
+                                    sendmsg(o + ": " + ", ".join(options[o]), user)
+                                break
+                        if not found:
+                            sendmsg("Restaurant could not be found", user)
         # only in channels
         else:
             pass
