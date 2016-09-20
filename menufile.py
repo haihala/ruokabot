@@ -17,7 +17,7 @@ class Menu:
         else:
             self.date = datetime.date.today()
             url = "https://api.ruoka.xyz/" + str(self.date)
-            r = requests.get(url)
-            self.menustr = r.text
-            self.menujson = r.json()
+            u = urllib2.urlopen(url)
+            self.menustr = u.read()
+            self.menujson = json.loads(self.menustr)
             return self.menujson
